@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mis Pensamientos en Globo</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body {
+    font-family: "Comic Sans MS", sans-serif;
+    background: linear-gradient(to top, #e0f7fa, #ffffff);
+    text-align: center;
+    color: #37474f;
+    margin: 0;
+    padding: 0;
+  }
+
+  h1 {
+    background-color: #4dd0e1;
+    color: white;
+    padding: 15px;
+    margin: 0;
+  }
+
+  .actividad {
+    margin: 30px auto;
+    width: 90%;
+    max-width: 700px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+  }
+
+  textarea {
+    width: 80%;
+    height: 60px;
+    border: 2px solid #4dd0e1;
+    border-radius: 10px;
+    font-size: 16px;
+    padding: 8px;
+    resize: none;
+  }
+
+  button {
+    background-color: #4dd0e1;
+    border: none;
+    color: white;
+    font-size: 18px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #0097a7;
+  }
+
+  .globo {
+    position: absolute;
+    font-size: 40px;
+    animation: volar 8s linear forwards;
+  }
+
+  @keyframes volar {
+    0% { bottom: 0; opacity: 1; }
+    100% { bottom: 100%; opacity: 0; }
+  }
+
+  .preguntas {
+    margin-top: 40px;
+    background: #e0f2f1;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: left;
+  }
+
+  .preguntas textarea {
+    width: 100%;
+    height: 70px;
+    border-radius: 10px;
+    border: 2px solid #4dd0e1;
+    padding: 8px;
+    font-size: 16px;
+    resize: none;
+  }
+
+</style>
+</head>
+<body>
+
+<h1>🎈 Mis Pensamientos viajan en Globo</h1>
+
+<div class="actividad">
+  <h2>💭 Escribe tu pensamiento o deseo</h2>
+  <p>Imagina algo que te haga feliz o algo bonito que quieras decir al mundo. Luego, suéltalo en un globo que volará por el cielo digital.</p>
+
+  <textarea id="pensamiento" placeholder="Escribe tu pensamiento aquí..."></textarea><br>
+  <button onclick="soltarGlobo()">🎈 Soltar globo</button>
+</div>
+
+<div class="actividad preguntas">
+  <h2>🖍️ Actividad en tu libro</h2>
+  <p>Dibuja tu globo y escribe dentro tu pensamiento. Usa colores que representen cómo te sientes.</p>
+  
+  <label>¿Qué emoción representa tu globo?</label>
+  <textarea id="emocion"></textarea>
+  
+  <label>¿Por qué elegiste ese pensamiento?</label>
+  <textarea id="razon"></textarea>
+  
+  <button onclick="leerRespuestas()">🗣️ Escuchar mis respuestas</button>
+</div>
+    <p style="margin-top:15px;">
+      <a href="index.html" style="color:#3a6b82; text-decoration:none;">⬅️ Volver al inicio</a>
+    </p>
+<script>
+  function soltarGlobo() {
+    const texto = document.getElementById("pensamiento").value.trim();
+    if (!texto) {
+      alert("Escribe un pensamiento antes de soltar el globo 🎈");
+      return;
+    }
+
+    const globo = document.createElement("div");
+    globo.className = "globo";
+    globo.style.left = Math.random() * 80 + "%";
+    globo.innerHTML = `🎈<div style="font-size:16px; margin-top:10px;">${texto}</div>`;
+    globo.style.bottom = "0px";
+    document.body.appendChild(globo);
+
+    const voz = new SpeechSynthesisUtterance(`Tu pensamiento dice: ${texto}`);
+    voz.lang = "es-ES";
+    voz.rate = 0.9;
+    speechSynthesis.speak(voz);
+
+    setTimeout(() => {
+      globo.remove();
+    }, 8000);
+  }
+
+  function leerRespuestas() {
+    const emocion = document.getElementById("emocion").value || "No escribió nada aún.";
+    const razon = document.getElementById("razon").value || "No escribió nada aún.";
+    const texto = `Mi globo representa la emoción de ${emocion}. Elegí este pensamiento porque ${razon}.`;
+
+    const hablar = new SpeechSynthesisUtterance(texto);
+    hablar.lang = "es-ES";
+    hablar.rate = 0.9;
+    speechSynthesis.speak(hablar);
+  }
+</script>
+
+</body>
+</html>

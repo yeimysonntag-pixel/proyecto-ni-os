@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cuentos Invertidos</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body {
+    font-family: "Comic Sans MS", sans-serif;
+    background-color: #fff8e7;
+    margin: 0;
+    padding: 0;
+    text-align: center;
+    color: #333;
+  }
+
+  header {
+    background-color: #ff9e80;
+    padding: 20px;
+    color: white;
+    font-size: 1.8em;
+    font-weight: bold;
+    border-bottom: 5px solid #ff7c58;
+  }
+
+  main {
+    padding: 20px;
+  }
+
+  button {
+    background-color: #ff9e80;
+    border: none;
+    color: white;
+    padding: 10px 20px;
+    margin: 15px 0;
+    border-radius: 12px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background 0.3s;
+  }
+
+  button:hover {
+    background-color: #ff7c58;
+  }
+
+  textarea {
+    width: 90%;
+    max-width: 500px;
+    height: 150px;
+    border-radius: 15px;
+    border: 2px solid #ffb399;
+    padding: 10px;
+    font-size: 1em;
+    margin-top: 15px;
+  }
+
+  footer {
+    background-color: #fff3e0;
+    padding: 15px;
+    font-size: 0.9em;
+    color: #555;
+  }
+
+  select {
+    margin-top: 10px;
+    padding: 8px;
+    border-radius: 10px;
+    border: 2px solid #ffc2a3;
+    font-size: 1em;
+  }
+</style>
+</head>
+<body>
+
+<header>🎧 Cuentos Invertidos</header>
+
+<main>
+  <h2>Escucha el cuento y usa tu imaginación</h2>
+  <p>Presiona "🔊 Escuchar cuento" para oír el cuento distorsionado. Luego dibuja o escribe lo que crees que sucede.</p>
+
+  <label for="vozSelect">🎤 Elige una voz:</label>
+  <select id="vozSelect"></select>
+
+  <button onclick="escucharCuento()">🔊 Escuchar cuento</button>
+  <audio id="vozDistorsionada" src="Un niño se puso tris.mp3"></audio>
+
+  <h3>✏️ Dibuja o escribe tu historia</h3>
+  <p>En tu libro: dibuja lo que imaginas antes de ver la versión real.</p>
+  <textarea placeholder="Escribe aquí lo que imaginas..."></textarea>
+
+  <h3>📖 Comparar con la versión real</h3>
+  <button onclick="leerCuentoReal()">📖 Escuchar cuento real</button>
+  <audio id="vozReal" src="_Había una vez un so.mp3"></audio>
+</main>
+
+<footer>💙 Proyecto educativo para niños con TEA | 2025</footer>
+
+<script>
+let voces = [];
+
+// Cargar voces disponibles
+function cargarVoces() {
+  voces = speechSynthesis.getVoices();
+  const select = document.getElementById("vozSelect");
+  select.innerHTML = "";
+
+  voces
+    .filter(v => v.lang.startsWith("es"))
+    .forEach(voz => {
+      const option = document.createElement("option");
+      option.value = voz.name;
+      option.textContent = `${voz.name} (${voz.lang})`;
+      select.appendChild(option);
+    });
+}
+
+// Asegurar que se carguen las voces
+window.speechSynthesis.onvoiceschanged = cargarVoces;
+
+// Leer texto con voz seleccionada
+function leerTexto(texto) {
+  const mensaje = new SpeechSynthesisUtterance(texto);
+  const vozSeleccionada = document.getElementById("vozSelect").value;
+  const voz = voces.find(v => v.name === vozSeleccionada);
+  if (voz) mensaje.voice = voz;
+  mensaje.lang = 'es-ES';
+  mensaje.rate = 1;      // Velocidad normal
+  mensaje.pitch = 1.4;   // Tono un poco más agudo (más infantil)
+  window.speechSynthesis.speak(mensaje);
+}
+
+// Cuento distorsionado
+function escucharCuento() {
+  const audio = document.getElementById("vozDistorsionada");
+
+  if (audio && audio.readyState > 0) {
+    audio.play(); // Usa el audio si existe
+  } else {
+    const cuentoInvertido = "¡zaM aL sÉcibmuC y aL onicnuL se odnI! ... era un cuento lleno de risas al revés y palabras mágicas que bailaban.";
+    leerTexto(cuentoInvertido);
+  }
+}
+
+// Cuento real
+function leerCuentoReal() {
+  const audio = document.getElementById("vozReal");
+
+  if (audio && audio.readyState > 0) {
+    audio.play(); // Usa el audio si existe
+  } else {
+    const cuentoReal = "Había una vez un sol brillante y una nube juguetona. Discutían quién podía hacer sonreír a un niño. La nube lo cubrió y el niño se puso triste. Luego, el sol brilló y el niño sonrió. Ambos aprendieron que juntos podían crear días perfectos.";
+    leerTexto(cuentoReal);
+  }
+}
+</script>
+
+</body>
+</html>
+

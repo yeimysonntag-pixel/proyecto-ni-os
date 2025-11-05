@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>QR de Acceso al Proyecto</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrious/4.0.2/qrious.min.js"></script>
+<style>
+  body {
+    font-family: "Comic Sans MS", sans-serif;
+    background-color: #fff8e7;
+    text-align: center;
+    padding: 50px;
+    color: #333;
+  }
+
+  h1 {
+    color: #ff7c58;
+    font-size: 2em;
+  }
+
+  p {
+    font-size: 1.1em;
+  }
+
+  #contenedorQR {
+    position: relative;
+    display: inline-block;
+  }
+
+  canvas {
+    margin-top: 25px;
+    border: 6px solid #ffb399;
+    border-radius: 20px;
+    padding: 10px;
+    background: white;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
+
+  #logo {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 50px; /* Tamaño del logo */
+    height: 50px;
+    transform: translate(-50%, -50%);
+    border-radius: 10px;
+  }
+</style>
+</head>
+<body>
+
+<h1>📱 ¡Escanea y entra al mundo de los cuentos!</h1>
+<p>Apunta la cámara de tu celular para visitar la página de inicio y escoger tu actividad favorita 🎨📖🤖</p>
+
+<div id="contenedorQR">
+  <canvas id="codigoQR"></canvas>
+  <!-- 🖼️ Coloca aquí la ruta de tu logo (puede ser un PNG o emoji convertido en imagen) -->
+  <img id="logo" src="imagenes/descarga.jpg" alt="Logo del Proyecto">
+</div>
+
+<script>
+// 🔗 Cambia esta URL por la dirección real de tu index.html
+// Ejemplo: "https://tusitioeducativo.com/index.html"
+const url = "file:///C:/Users/Yeimy/OneDrive%20-%20INACAP/Desktop/proyecto/index.html";
+
+// Generar QR con QRious
+const qr = new QRious({
+  element: document.getElementById("codigoQR"),
+  value: url,
+  size: 250,
+  background: "white",
+  foreground: "#ff7c58"
+});
+</script>
+
+</body>
+</html>

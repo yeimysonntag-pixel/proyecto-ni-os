@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mi Robot Ayudante</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  body {
+    font-family: "Comic Sans MS", sans-serif;
+    background: linear-gradient(to top, #f1f8e9, #ffffff);
+    text-align: center;
+    color: #37474f;
+    margin: 0;
+    padding: 0;
+  }
+
+  h1 {
+    background-color: #aed581;
+    color: white;
+    padding: 15px;
+    margin: 0;
+  }
+
+  .actividad {
+    margin: 30px auto;
+    width: 90%;
+    max-width: 750px;
+    background: white;
+    border-radius: 15px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    padding: 20px;
+  }
+
+  .opciones {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+  }
+
+  .parte {
+    width: 90px;
+    height: 90px;
+    border: 2px solid #aed581;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.3s, border-color 0.3s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 50px;
+  }
+
+  .parte:hover {
+    transform: scale(1.1);
+    border-color: #7cb342;
+  }
+
+  #robotPreview {
+    margin: 30px auto;
+    width: 200px;
+    height: 250px;
+    border: 2px dashed #aed581;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    font-size: 60px;
+    background-color: #f9fbe7;
+  }
+
+  button {
+    background-color: #aed581;
+    border: none;
+    color: white;
+    font-size: 18px;
+    padding: 10px 20px;
+    border-radius: 10px;
+    margin-top: 15px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #7cb342;
+  }
+
+  .preguntas {
+    margin-top: 40px;
+    background: #f1f8e9;
+    border-radius: 12px;
+    padding: 20px;
+    text-align: left;
+  }
+
+  .preguntas textarea {
+    width: 100%;
+    height: 70px;
+    border-radius: 10px;
+    border: 2px solid #aed581;
+    padding: 8px;
+    font-size: 16px;
+    resize: none;
+  }
+</style>
+</head>
+<body>
+
+<h1>🤖 Mi Robot Ayudante</h1>
+
+<div class="actividad">
+  <h2>✨ Diseña tu propio robot</h2>
+  <p>Elige las partes de tu robot y decide qué función tendrá: cuidar plantas, ordenar juguetes o contar cuentos.</p>
+
+  <h3>Cabeza</h3>
+  <div class="opciones" id="cabezas">
+    <div class="parte" onclick="seleccionarParte('🤖','cabeza')">🤖</div>
+    <div class="parte" onclick="seleccionarParte('😎','cabeza')">😎</div>
+    <div class="parte" onclick="seleccionarParte('🧠','cabeza')">🧠</div>
+  </div>
+
+  <h3>Cuerpo</h3>
+  <div class="opciones" id="cuerpos">
+    <div class="parte" onclick="seleccionarParte('📦','cuerpo')">📦</div>
+    <div class="parte" onclick="seleccionarParte('💡','cuerpo')">💡</div>
+    <div class="parte" onclick="seleccionarParte('🛠️','cuerpo')">🛠️</div>
+  </div>
+
+  <h3>Piernas</h3>
+  <div class="opciones" id="piernas">
+    <div class="parte" onclick="seleccionarParte('👟','piernas')">👟</div>
+    <div class="parte" onclick="seleccionarParte('🦿','piernas')">🦿</div>
+    <div class="parte" onclick="seleccionarParte('🛴','piernas')">🛴</div>
+  </div>
+
+  <div id="robotPreview">
+    <div id="head">🤖</div>
+    <div id="body">📦</div>
+    <div id="legs">🦿</div>
+  </div>
+
+  <button onclick="mostrarRobot()">🚀 Ver mi robot</button>
+</div>
+
+<div class="actividad preguntas">
+  <h2>🖍️ Actividad en tu libro</h2>
+  <p>Dibuja o arma tu robot con materiales reciclados (como cajas o tapas) y responde:</p>
+
+  <label>🤔 ¿Qué le gusta hacer a tu robot?</label>
+  <textarea id="gusta"></textarea>
+
+  <label>🍽️ ¿De qué se alimenta?</label>
+  <textarea id="alimenta"></textarea>
+
+  <label>😊 ¿Qué hace feliz a tu robot?</label>
+  <textarea id="feliz"></textarea>
+
+  <label>🌙 ¿Qué hace tu robot cuando tú duermes?</label>
+  <textarea id="duerme"></textarea>
+
+  <button onclick="leerRobot()">🗣️ Escuchar sobre mi robot</button>
+</div>
+    <p style="margin-top:15px;">
+      <a href="index.html" style="color:#3a6b82; text-decoration:none;">⬅️ Volver al inicio</a>
+    </p>
+
+<script>
+  let partes = {
+    cabeza: '🤖',
+    cuerpo: '📦',
+    piernas: '🦿'
+  };
+
+  function seleccionarParte(emoji, tipo) {
+    partes[tipo] = emoji;
+    document.getElementById(tipo === 'cabeza' ? 'head' : tipo === 'cuerpo' ? 'body' : 'legs').innerText = emoji;
+    const mensaje = new SpeechSynthesisUtterance(`Has elegido una ${tipo} ${emoji}`);
+    mensaje.lang = 'es-ES';
+    mensaje.rate = 0.9;
+    speechSynthesis.speak(mensaje);
+  }
+
+  function mostrarRobot() {
+    const mensaje = new SpeechSynthesisUtterance("¡Genial! Tu robot está completo y listo para ayudar.");
+    mensaje.lang = 'es-ES';
+    mensaje.rate = 0.9;
+    speechSynthesis.speak(mensaje);
+  }
+
+  function leerRobot() {
+    const gusta = document.getElementById("gusta").value || "no escribió nada aún";
+    const alimenta = document.getElementById("alimenta").value || "no escribió nada aún";
+    const feliz = document.getElementById("feliz").value || "no escribió nada aún";
+    const duerme = document.getElementById("duerme").value || "no escribió nada aún";
+
+    const texto = `Mi robot tiene una cabeza ${partes.cabeza}, un cuerpo ${partes.cuerpo} y unas piernas ${partes.piernas}. 
+    Le gusta ${gusta}. 
+    Se alimenta de ${alimenta}. 
+    Es feliz cuando ${feliz}. 
+    Y cuando yo duermo, ${duerme}.`;
+
+    const hablar = new SpeechSynthesisUtterance(texto);
+    hablar.lang = "es-ES";
+    hablar.rate = 0.9;
+    speechSynthesis.speak(hablar);
+  }
+</script>
+
+</body>
+</html>

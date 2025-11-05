@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crea tu Monstruo - Aventuras Creativas</title>
+<style>
+body {
+  font-family: "Comic Sans MS", sans-serif;
+  background-color: #f2fbff;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  color: #333;
+}
+header {
+  background-color: #80c9ff;
+  padding: 20px;
+  color: white;
+  font-size: 1.8em;
+  font-weight: bold;
+  border-bottom: 5px solid #58a9e0;
+}
+main {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  gap: 20px;
+}
+.actividad {
+  background: white;
+  border-radius: 20px;
+  width: 90%;
+  max-width: 600px;
+  padding: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  transition: transform 0.2s;
+}
+.actividad:hover {
+  transform: scale(1.03);
+}
+.actividad img {
+  width: 80px;
+  margin: 5px;
+  border-radius: 15px;
+  cursor: grab;
+}
+button {
+  background-color: #80c9ff;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  margin-top: 10px;
+  border-radius: 12px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+button:hover {
+  background-color: #58a9e0;
+}
+footer {
+  background-color: #e7f5ff;
+  padding: 15px;
+  font-size: 0.9em;
+  color: #555;
+}
+.monstruo {
+  background: #f0faff;
+  width: 100%;
+  max-width: 500px;
+  min-height: 250px;
+  border-radius: 15px;
+  border: 2px dashed #58a9e0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin: 15px 0;
+  position: relative;
+}
+#mensajeDrop {
+  position: absolute;
+  color: #58a9e0;
+  font-size: 1em;
+  width: 100%;
+  text-align: center;
+}
+#preguntas div {
+  background: #eaf9fa;
+  border-radius: 10px;
+  padding: 8px;
+  margin: 8px 0;
+  text-align: left;
+  cursor: text;
+}
+</style>
+</head>
+<body>
+
+<header>🌈 Aventuras Creativas para Niños</header>
+
+<main>
+  <div class="actividad">
+    <h3>🐉 Crea tu monstruo digital</h3>
+    <p>Arrastra las partes del cuerpo al recuadro y construye tu monstruo divertido.</p>
+    
+    <div>
+      <img src="imagenes/ojos1.jpg" draggable="true" ondragstart="drag(event)" alt="ojos">
+      <img src="imagenes/ojos2.jpg" draggable="true" ondragstart="drag(event)" alt="ojos">
+      <img src="imagenes/patas1.jpg" draggable="true" ondragstart="drag(event)" alt="patas">
+      <img src="imagenes/patas2.jpg" draggable="true" ondragstart="drag(event)" alt="patas">
+      <img src="imagenes/alas2.jpg" draggable="true" ondragstart="drag(event)" alt="alas">
+      <img src="imagenes/alas3.jpg" draggable="true" ondragstart="drag(event)" alt="alas">
+    </div>
+
+    <div class="monstruo" id="zonaDrop" ondrop="drop(event)" ondragover="allowDrop(event)">
+      <p id="mensajeDrop">💡 Arrastra aquí las partes del monstruo</p>
+    </div>
+
+    <div id="preguntas">
+      <h4>📘 Actividad en tu libro</h4>
+      <p>Dibuja o arma tu monstruo con materiales reciclados y responde:</p>
+      <div contenteditable="true" id="gusto">💭 ¿Qué le gusta hacer?</div>
+      <div contenteditable="true" id="comida">🍎 ¿De qué se alimenta?</div>
+      <div contenteditable="true" id="felicidad">😊 ¿Qué hace feliz a tu monstruo?</div>
+      <button onclick="mostrarResumen()">Ver mi monstruo</button>
+      <p id="resumen"></p>
+    </div>
+
+    <p style="margin-top:15px;">
+      <a href="index.html" style="color:#3a6b82; text-decoration:none;">⬅️ Volver al inicio</a>
+    </p>
+  </div>
+</main>
+
+<footer>💙 Proyecto educativo inclusivo para niños  | 2025</footer>
+
+<script>
+let seleccion = { ojos: false, patas: false, alas: false };
+
+function allowDrop(ev) {
+  ev.preventDefault();
+}
+
+function drag(ev) {
+  ev.dataTransfer.setData("text", ev.target.src);
+  ev.dataTransfer.setData("tipo", ev.target.alt.toLowerCase());
+}
+
+function drop(ev) {
+  ev.preventDefault();
+  const data = ev.dataTransfer.getData("text");
+  const tipo = ev.dataTransfer.getData("tipo");
+
+  // Evitar duplicados por categoría
+  if (seleccion[tipo]) return;
+
+  seleccion[tipo] = true;
+
+  const zona = document.getElementById("zonaDrop");
+
+  // Borrar mensaje inicial
+  const mensaje = document.getElementById("mensajeDrop");
+  if (mensaje) mensaje.remove();
+
+  // Crear y agregar la imagen al recuadro
+  const img = document.createElement("img");
+  img.src = data;
+  img.style.width = "80px";
+  img.style.height = "80px";
+  img.style.objectFit = "contain";
+  img.alt = tipo;
+  zona.appendChild(img);
+}
+
+function mostrarResumen() {
+  const gusto = document.getElementById("gusto").innerText.trim();
+  const comida = document.getElementById("comida").innerText.trim();
+  const felicidad = document.getElementById("felicidad").innerText.trim();
+
+  const resumen = `
+    🧠 ${gusto || "¿Qué le gusta hacer?"}<br>
+    🍽️ ${comida || "¿De qué se alimenta?"}<br>
+    💖 ${felicidad || "¿Qué hace feliz a tu monstruo?"}
+  `;
+  document.getElementById("resumen").innerHTML = resumen;
+
+  // Voz sintetizada
+  const narrador = new SpeechSynthesisUtterance(`${gusto}. ${comida}. ${felicidad}.`);
+  narrador.lang = "es-ES";
+  speechSynthesis.speak(narrador);
+}
+</script>
+
+</body>
+</html>
